@@ -3,12 +3,11 @@ Windows version of [DisplayServer](https://github.com/BrandMeister/DisplayServer
 
 
 ## Executable
-If you do not want to compile it yourself, just copy the binary from the [DisplayServer/bin/Release](DisplayServer/bin/Release) directory
-
+If you do not want to compile it yourself, just copy the binary from the [DisplayServer/bin/Release](raw/main/DisplayServer/bin/Release/Displayserver.exe) directory
 
 ## Configuration
-Settings are taken to the registry.  
-When starting the first time, DisplayServer writes the configuration to expect the data to come on UDP 224.1.2.3:62001
+Settings are taken from the registry.  
+When starting the first time, DisplayServer writes the initial configuration to the registry, expecting the data to come on UDP 224.1.2.3:62001
 
 This is also the address you have to configure for DMRHost in MMDVM.ini
 
