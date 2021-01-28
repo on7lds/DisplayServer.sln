@@ -3,7 +3,7 @@ Windows version of [DisplayServer](https://github.com/BrandMeister/DisplayServer
 
 
 ## Executable
-If you do not want to compile it yourself, just copy the binary from the [DisplayServer/bin/Release](raw/main/DisplayServer/bin/Release/Displayserver.exe) directory
+If you do not want to compile it yourself, just copy the binary from the [DisplayServer/bin/Release](https://github.com/on7lds/DisplayServer.sln/raw/main/DisplayServer/bin/Release/Displayserver.exe) directory
 
 ## Configuration
 Settings are taken from the registry.  
