@@ -1,0 +1,14 @@
+C:\Users\Lieven\Documents\DMRHost DisplayServer\DisplayServer.sln\DisplayServer\bin\Release\Displayserver.exe.config
+C:\Users\Lieven\Documents\DMRHost DisplayServer\DisplayServer.sln\DisplayServer\bin\Release\Displayserver.exe
+C:\Users\Lieven\Documents\DMRHost DisplayServer\DisplayServer.sln\DisplayServer\bin\Release\Displayserver.pdb
+C:\Users\Lieven\Documents\DMRHost DisplayServer\DisplayServer.sln\DisplayServer\bin\Release\Displayserver.xml
+C:\Users\Lieven\Documents\DMRHost DisplayServer\DisplayServer.sln\DisplayServer\obj\Release\DisplayServer.vbprojAssemblyReference.cache
+C:\Users\Lieven\Documents\DMRHost DisplayServer\DisplayServer.sln\DisplayServer\obj\Release\Displayserver.AboutBox.resources
+C:\Users\Lieven\Documents\DMRHost DisplayServer\DisplayServer.sln\DisplayServer\obj\Release\Displayserver.MainForm.resources
+C:\Users\Lieven\Documents\DMRHost DisplayServer\DisplayServer.sln\DisplayServer\obj\Release\Displayserver.Log.resources
+C:\Users\Lieven\Documents\DMRHost DisplayServer\DisplayServer.sln\DisplayServer\obj\Release\Displayserver.Resources.resources
+C:\Users\Lieven\Documents\DMRHost DisplayServer\DisplayServer.sln\DisplayServer\obj\Release\DisplayServer.vbproj.GenerateResource.cache
+C:\Users\Lieven\Documents\DMRHost DisplayServer\DisplayServer.sln\DisplayServer\obj\Release\DisplayServer.vbproj.CoreCompileInputs.cache
+C:\Users\Lieven\Documents\DMRHost DisplayServer\DisplayServer.sln\DisplayServer\obj\Release\Displayserver.exe
+C:\Users\Lieven\Documents\DMRHost DisplayServer\DisplayServer.sln\DisplayServer\obj\Release\Displayserver.xml
+C:\Users\Lieven\Documents\DMRHost DisplayServer\DisplayServer.sln\DisplayServer\obj\Release\Displayserver.pdb

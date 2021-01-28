@@ -1,0 +1,36 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Displayserver
+</name>
+</assembly>
+<members>
+<member name="T:Displayserver.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:Displayserver.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:Displayserver.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="P:Displayserver.My.Resources.Resources.ProgName">
+<summary>
+  Looks up a localized string similar to DisplayServer.
+</summary>
+</member>
+<member name="P:Displayserver.My.Resources.Resources.REGISTRY_PROG_KEY">
+<summary>
+  Looks up a localized string similar to Software\ON7LDS\.
+</summary>
+</member>
+</members>
+</doc>
