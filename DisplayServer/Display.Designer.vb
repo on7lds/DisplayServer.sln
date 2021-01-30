@@ -33,6 +33,7 @@ Partial Class MainForm
         Me.QuitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AlwaysInForntToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.IpAddressToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
@@ -106,7 +107,7 @@ Partial Class MainForm
         '
         'EditToolStripMenuItem
         '
-        Me.EditToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AlwaysInForntToolStripMenuItem})
+        Me.EditToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AlwaysInForntToolStripMenuItem, Me.IpAddressToolStripMenuItem})
         Me.EditToolStripMenuItem.Name = "EditToolStripMenuItem"
         Me.EditToolStripMenuItem.Size = New System.Drawing.Size(61, 20)
         Me.EditToolStripMenuItem.Text = "Options"
@@ -118,6 +119,13 @@ Partial Class MainForm
         Me.AlwaysInForntToolStripMenuItem.Name = "AlwaysInForntToolStripMenuItem"
         Me.AlwaysInForntToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.AlwaysInForntToolStripMenuItem.Text = "Always in front"
+        '
+        'IpAddressToolStripMenuItem
+        '
+        Me.IpAddressToolStripMenuItem.Name = "IpAddressToolStripMenuItem"
+        Me.IpAddressToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F7
+        Me.IpAddressToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.IpAddressToolStripMenuItem.Text = "socket settings"
         '
         'HelpToolStripMenuItem
         '
@@ -259,4 +267,5 @@ Partial Class MainForm
     Friend WithEvents Label4 As Label
     Friend WithEvents HelpToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents AboutToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents IpAddressToolStripMenuItem As ToolStripMenuItem
 End Class

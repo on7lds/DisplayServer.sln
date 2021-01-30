@@ -12,3 +12,4 @@ C:\Users\Lieven\Documents\DMRHost DisplayServer\DisplayServer.sln\DisplayServer\
 C:\Users\Lieven\Documents\DMRHost DisplayServer\DisplayServer.sln\DisplayServer\obj\Release\Displayserver.exe
 C:\Users\Lieven\Documents\DMRHost DisplayServer\DisplayServer.sln\DisplayServer\obj\Release\Displayserver.xml
 C:\Users\Lieven\Documents\DMRHost DisplayServer\DisplayServer.sln\DisplayServer\obj\Release\Displayserver.pdb
+C:\Users\Lieven\Documents\DMRHost DisplayServer\DisplayServer.sln\DisplayServer\obj\Release\Displayserver.Settings.resources

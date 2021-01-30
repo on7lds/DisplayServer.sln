@@ -8,8 +8,8 @@ Imports System.Threading
 Public Class MainForm
     Dim ListenThread As Thread
 
-    Dim IPadres As String = "224.1.2.3"
-    Dim IPpoort As Integer = 62001
+    Public IPadres As String = "224.1.2.3"
+    Public IPpoort As Integer = 62001
     Public MaxLogLines = 1000
     Dim KleurActief, KleurStop, KleurFout As Color
 
@@ -43,9 +43,7 @@ Public Class MainForm
 
     End Sub
 
-
-
-    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub ReadSettings()
         Dim s As String
         Dim i As Integer
         s = LeesConfig("IPaddress")
@@ -79,6 +77,22 @@ Public Class MainForm
         s = LeesConfig("ColorError")
         If s.Length > 0 Then KleurFout = Color.FromArgb(Convert.ToInt32(s, 16))
         SchrijfConfig("ColorError", Hex(KleurFout.ToArgb))
+    End Sub
+
+
+    Public Sub WriteSettings()
+        SchrijfConfig("IPaddress", IPadres)
+        SchrijfConfig("IPport", IPpoort)
+        SchrijfConfig("MaxLogLines", MaxLogLines)
+        SchrijfConfig("ColorActive", Hex(KleurActief.ToArgb))
+        SchrijfConfig("ColorStop", Hex(KleurStop.ToArgb))
+        SchrijfConfig("ColorError", Hex(KleurFout.ToArgb))
+    End Sub
+
+
+
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        ReadSettings()
 
         Me.TopMost = True
         wisVelden = True
@@ -129,12 +143,13 @@ Public Class MainForm
 
     Private Sub BeginListen()
         Dim bteReceiveData() As Byte
-        Dim TA, TA2 As String
+        Dim TA, TA2, F As String
         Dim c, type As Byte
         Dim id, slot As Integer
         Dim ok As Boolean
 
         ok = True
+        F = ""
 
         GroupIP = IPAddress.Parse(IPadres)
 
@@ -143,7 +158,7 @@ Public Class MainForm
             ListenUdp = New UdpClient(IPpoort)
             ListenUdp.JoinMulticastGroup(GroupIP)
         Catch ex As Exception
-            tekst = "ERROR : " & ex.Message
+            F = "ERROR : " & ex.Message
             Threading.Thread.Sleep(100)
             Application.DoEvents()
             ok = False
@@ -151,6 +166,7 @@ Public Class MainForm
 
         If ok = True Then
             ToolStripStatusLabel1.Text = "Listening on " & IPadres & ":" & IPpoort
+
         End If
 
         TA = ""
@@ -160,6 +176,7 @@ Public Class MainForm
             If (ok) Then
                 bteReceiveData = ListenUdp.Receive(GroupEP)
                 type = bteReceiveData(0)
+
             Else
                 bteReceiveData = {0}
                 type = 0
@@ -183,6 +200,8 @@ Public Class MainForm
             If (bteReceiveData.Length > 1) Then slot = bteReceiveData(1) Else slot = 0
             Select Case type
                 Case 0
+                    ZetText(Label4, F)
+                    Label4.ForeColor = KleurFout
                     Slot2_src = "ERROR: Socket in use"
                     GroupBox1.BackColor = KleurFout
                 Case 1
@@ -308,6 +327,10 @@ Public Class MainForm
     Sub VerbergLog()
         LogToolStripMenuItem.Checked = False
         Log.Hide()
+    End Sub
+
+    Private Sub IpAddressToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles IpAddressToolStripMenuItem.Click
+        Settings.ShowDialog()
     End Sub
 
     Private Sub LogToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles QuitToolStripMenuItem.Click, LogToolStripMenuItem.Click
