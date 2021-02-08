@@ -77,6 +77,14 @@ Public Class MainForm
         s = LeesConfig("ColorError")
         If s.Length > 0 Then KleurFout = Color.FromArgb(Convert.ToInt32(s, 16))
         SchrijfConfig("ColorError", Hex(KleurFout.ToArgb))
+
+        s = LeesConfig("MainWidth")
+        If (s.Length > 0) Then i = s Else i = 0
+        If (i >= 500) Then Me.Width = i
+
+        s = LeesConfig("MainHeight")
+        If (s.Length > 0) Then i = s Else i = 0
+        If (i >= 165) Then Me.Height = i Else Me.Height = 220
     End Sub
 
 
@@ -96,7 +104,8 @@ Public Class MainForm
 
         Me.TopMost = True
         wisVelden = True
-        Label4.Text = ""
+        LabelLast1.Text = ""
+        LabelLast2.Text = ""
         Main()
         Timer1.Enabled = True
 
@@ -133,17 +142,22 @@ Public Class MainForm
         Slot1_TA = ""
         Slot2_TA = ""
 
-        Label1.Text = ""
-        Label2.Text = ""
-        Label3.Text = ""
-        Label5.Text = ""
+        LabelSRC1.Text = ""
+        LabelCallType1.Text = ""
+        LabelDST1.Text = ""
+        LabelTA1.Text = ""
 
-        GroupBox1.BackColor = SystemColors.Control
+        LabelSRC2.Text = ""
+        LabelCallType2.Text = ""
+        LabelDST2.Text = ""
+        LabelTA2.Text = ""
+
+        GroupBoxSlot2Current.BackColor = SystemColors.Control
     End Sub
 
     Private Sub BeginListen()
         Dim bteReceiveData() As Byte
-        Dim TA, TA2, F As String
+        Dim TA, TA1, TA2, F As String
         Dim c, type As Byte
         Dim id, slot As Integer
         Dim ok As Boolean
@@ -170,6 +184,7 @@ Public Class MainForm
         End If
 
         TA = ""
+        TA1 = ""
         TA2 = ""
 
         Do
@@ -184,6 +199,8 @@ Public Class MainForm
             End If
 
             TA = ""
+            TA1=""
+            TA2=""
 
             tekst = Format(Now, "********** dd/MM/yyyy **********")
             If Not (nu = tekst) Then
@@ -200,15 +217,17 @@ Public Class MainForm
             If (bteReceiveData.Length > 1) Then slot = bteReceiveData(1) Else slot = 0
             Select Case type
                 Case 0
-                    ZetText(Label4, F)
-                    Label4.ForeColor = KleurFout
+                    ZetText(LabelLast2, F)
+                    LabelLast2.ForeColor = KleurFout
                     Slot2_src = "ERROR: Socket in use"
-                    GroupBox1.BackColor = KleurFout
+                    GroupBoxSlot2Current.BackColor = KleurFout
+                    Slot1_src = ""
                 Case 1
                     wisVelden = True
                     Threading.Thread.Sleep(100)
                     tekst = tekst & "Idle"
                     Slot2_src = "Idle"
+                    Slot1_src = "Idle"
                 Case 2
                     wisVelden = True
                     Threading.Thread.Sleep(100)
@@ -217,7 +236,7 @@ Public Class MainForm
                         c = bteReceiveData(i + 1)
                         If (c > 31) Then tekst = tekst & Chr(c) Else tekst = tekst & "[" & c & "]"
                     Next
-                    GroupBox1.BackColor = KleurFout
+                    GroupBoxSlot2Current.BackColor = KleurFout
                 Case 3
                     wisVelden = True
                     Threading.Thread.Sleep(100)
@@ -237,12 +256,16 @@ Public Class MainForm
                     Else
                         If slot = 1 Then Slot1_type = "Private Call" Else Slot2_type = "Private Call"
                     End If
-                    Slot1_type = ">>> " & Slot1_type & " >>>"
-                    Slot2_type = ">>> " & Slot2_type & " >>>"
+                    If slot = 1 Then
+                        Slot1_type = ">>> " & Slot1_type & " >>>"
+                        If Slot1_TA.Length > 0 Then TA1 = " (" & Slot1_TA & ") " Else TA1 = ""
+                        GroupBoxSlot1Current.BackColor = KleurActief
+                    Else
+                        Slot2_type = ">>> " & Slot2_type & " >>>"
+                        If Slot2_TA.Length > 0 Then TA2 = " (" & Slot2_TA & ") " Else TA2 = ""
+                        GroupBoxSlot2Current.BackColor = KleurActief
+                    End If
 
-                    If Slot2_TA.Length > 0 Then TA2 = " (" & Slot2_TA & ") " Else TA2 = ""
-
-                    GroupBox1.BackColor = KleurActief
 
                 Case 5 'DMR RSSI
                     tekst = tekst & "Slot " & bteReceiveData(1) & " RSSI " & bteReceiveData(2)
@@ -254,18 +277,27 @@ Public Class MainForm
                         TA = ""
                         For i = 1 To bteReceiveData(3)
                             c = bteReceiveData(3 + i)
-                            If (c > 31) Then TA = TA & Chr(c) Else TA = TA & "[" & c & "]"
+                            If (c = 127) Then c = 32
+                            If (c > 31) and (c < 127) Then TA = TA & Chr(c) Else TA = TA & "[" & c & "]"
                         Next
                         tekst = tekst & TA
-
                     End If
+
                     If slot = 1 Then Slot1_TA = TA Else Slot2_TA = TA
-                    If slot = 2 Then
+
+                    If slot = 1 Then
+                        If Slot1_TA.Length > 0 Then
+                            If Slot1_TA.Length > 0 Then TA1 = " (" & Slot1_TA & ") " Else TA1 = ""
+                        Else
+                            ZetText(LabelLast1, Slot1_src & TA1 & " > " & Slot1_dst)
+                            ZetText(GroupBoxSlot1Last, "Last " & Format(Now, " (HH:mm:ss)"))
+                        End If
+                    Else
                         If Slot2_TA.Length > 0 Then
                             If Slot2_TA.Length > 0 Then TA2 = " (" & Slot2_TA & ") " Else TA2 = ""
                         Else
-                            ZetText(Label4, Slot2_src & TA2 & " > " & Slot2_dst)
-                            ZetText(GroupBox2, "Last " & Format(Now, " (HH:mm:ss)"))
+                            ZetText(LabelLast2, Slot2_src & TA2 & " > " & Slot2_dst)
+                            ZetText(GroupBoxSlot2Last, "Last " & Format(Now, " (HH:mm:ss)"))
                         End If
                     End If
                 Case 7 'DMR BER
@@ -276,10 +308,17 @@ Public Class MainForm
                     Next
                 Case 8 'Clear DMR
                     tekst = tekst & "Clear DMR slot " & bteReceiveData(1)
-                    If bteReceiveData(1) = 1 Then Slot1_TA = "" Else Slot2_TA = ""
-                    ZetText(Label4, Slot2_src & TA2 & " > " & Slot2_dst)
-                    ZetText(GroupBox2, "Last " & Format(Now, " (HH:mm:ss)"))
-                    GroupBox1.BackColor = SystemColors.Control
+                    If bteReceiveData(1) = 1 Then
+                        Slot1_TA = ""
+                        ZetText(LabelLast1, Slot1_src & TA1 & " > " & Slot1_dst)
+                        ZetText(GroupBoxSlot1Last, "Last " & Format(Now, " (HH:mm:ss)"))
+                        GroupBoxSlot1Current.BackColor = SystemColors.Control
+                    Else
+                        Slot2_TA = ""
+                        ZetText(LabelLast2, Slot2_src & TA2 & " > " & Slot2_dst)
+                        ZetText(GroupBoxSlot2Last, "Last " & Format(Now, " (HH:mm:ss)"))
+                        GroupBoxSlot2Current.BackColor = SystemColors.Control
+                    End If
                 Case 9
                     id = bteReceiveData(1) * 256 * 256 * 256 + bteReceiveData(2) * 256 * 256 + bteReceiveData(3) * 256 + bteReceiveData(4)
                     tekst = tekst & "POCSAG RIC " & id & "Msg : "
@@ -298,7 +337,8 @@ Public Class MainForm
                 Case 13
                     tekst = tekst & "Close Display"
                     Slot2_src = "Display closed"
-                    GroupBox1.BackColor = KleurStop
+                    Slot1_src = "Display closed"
+                    GroupBoxSlot2Current.BackColor = KleurStop
                 Case Else
                     tekst = tekst & "Unknow type " & type
 
@@ -309,10 +349,16 @@ Public Class MainForm
             Catch ex As Exception
             End Try
 
-            ZetText(Label1, Slot2_src)
-            ZetText(Label2, Slot2_type)
-            ZetText(Label3, Slot2_dst)
-            ZetText(Label5, TA)
+
+            ZetText(LabelSRC1, Slot1_src)
+            ZetText(LabelCallType1, Slot1_type)
+            ZetText(LabelDST1, Slot1_dst)
+            ZetText(LabelTA1, TA1)
+
+            ZetText(LabelSRC2, Slot2_src)
+            ZetText(LabelCallType2, Slot2_type)
+            ZetText(LabelDST2, Slot2_dst)
+            ZetText(LabelTA2, TA2)
 
             Application.DoEvents()
         Loop
@@ -362,6 +408,8 @@ Public Class MainForm
 
     Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         SchrijfConfig("MaxLogLines", MaxLogLines)
+        SchrijfConfig("MainWidth", Me.Width)
+        SchrijfConfig("MainHeight", Me.Height)
         Try
             ListenUdp.DropMulticastGroup(GroupIP)
             ListenUdp.Close()
@@ -377,7 +425,6 @@ Public Class MainForm
             Log.WindowState = FormWindowState.Minimized
         ElseIf (Me.WindowState = FormWindowState.Normal) Then
             Log.WindowState = FormWindowState.Normal
-
         Else
 
             'Dim fontName As FontFamily = Label2.Font.FontFamily
@@ -390,6 +437,14 @@ Public Class MainForm
             w = ToolStripStatusLabel2.Width
             ToolStripStatusLabel2.Width = Me.Size.Width - 250
         End If
+
+        'If (Me.Size.Height < 350) Then GroupBox4.Visible = False Else GroupBox4.Visible = True
+        'If (Me.Size.Height < 290) Then GroupBox3.Visible = False Else GroupBox3.Visible = True
+
+        If (Me.Size.Height > 242) And (Me.Size.Height < 300) Then GroupBoxSlot2Last.Visible = False Else GroupBoxSlot2Last.Visible = True
+
+        If (Me.Size.Height < 300) Then GroupBoxSlot1Last.Visible = False Else GroupBoxSlot1Last.Visible = True
+
 
     End Sub
 
