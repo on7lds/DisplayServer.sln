@@ -3,7 +3,7 @@ Windows version of [DisplayServer](https://github.com/BrandMeister/DisplayServer
 
 
 ## Version
-1.0 initial release, single slot hotspot use
+1.0 initial release, single slot hotspot use  
 1.1 single/dual slot use (you just have to resize the window)
 
 
