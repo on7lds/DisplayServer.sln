@@ -19,6 +19,7 @@ Public Class MainForm
     Dim Slot1_TA, Slot2_TA As String
     Dim wisVelden As Boolean = False
     Dim tekst As String = ""
+    Dim tekstPeer As String = ""
 
     Dim nu As String = ""
 
@@ -157,13 +158,14 @@ Public Class MainForm
 
     Private Sub BeginListen()
         Dim bteReceiveData() As Byte
-        Dim TA, TA1, TA2, F As String
+        Dim TA, TA1, TA2, lastTA1, lastTA2, F, peer As String
         Dim c, type As Byte
         Dim id, slot As Integer
         Dim ok As Boolean
 
         ok = True
         F = ""
+        peer = ""
 
         GroupIP = IPAddress.Parse(IPadres)
 
@@ -186,11 +188,14 @@ Public Class MainForm
         TA = ""
         TA1 = ""
         TA2 = ""
+        lastTA1 = ""
+        lastTA2 = ""
 
         Do
             If (ok) Then
                 bteReceiveData = ListenUdp.Receive(GroupEP)
                 type = bteReceiveData(0)
+                peer = GroupEP.Address.ToString
 
             Else
                 bteReceiveData = {0}
@@ -199,8 +204,10 @@ Public Class MainForm
             End If
 
             TA = ""
-            TA1=""
-            TA2=""
+            If (TA1.Length > 0) Then lastTA1 = TA1
+            TA1 = ""
+            If (TA2.Length > 0) Then lastTA2 = TA2
+            TA2 =""
 
             tekst = Format(Now, "********** dd/MM/yyyy **********")
             If Not (nu = tekst) Then
@@ -211,7 +218,7 @@ Public Class MainForm
                 tekst = ""
             End If
             Try
-                ToolStripStatusLabel2.Text = Format(Now, "[HH:mm:ss]")
+                ToolStripStatusLabel2.Text = Format(Now, "[HH:mm:ss]") & " from " & peer
             Catch
             End Try
             If (bteReceiveData.Length > 1) Then slot = bteReceiveData(1) Else slot = 0
@@ -242,6 +249,7 @@ Public Class MainForm
                     Threading.Thread.Sleep(100)
                     tekst = tekst & "Quit "
                 Case 4 'write DMR
+                    tekstPeer = "Data from " & peer
                     id = bteReceiveData(2) * 256 * 256 * 256 + bteReceiveData(3) * 256 * 256 + bteReceiveData(4) * 256 + bteReceiveData(5)
                     If slot = 1 Then Slot1_src = id Else Slot2_src = id
                     tekst = tekst & "DMR " & id & " --> "
@@ -289,14 +297,14 @@ Public Class MainForm
                         If Slot1_TA.Length > 0 Then
                             If Slot1_TA.Length > 0 Then TA1 = " (" & Slot1_TA & ") " Else TA1 = ""
                         Else
-                            ZetText(LabelLast1, Slot1_src & TA1 & " > " & Slot1_dst)
+                            ZetText(LabelLast1, Slot1_src & lastTA1 & " > " & Slot1_dst)
                             ZetText(GroupBoxSlot1Last, "Last " & Format(Now, " (HH:mm:ss)"))
                         End If
                     Else
                         If Slot2_TA.Length > 0 Then
                             If Slot2_TA.Length > 0 Then TA2 = " (" & Slot2_TA & ") " Else TA2 = ""
                         Else
-                            ZetText(LabelLast2, Slot2_src & TA2 & " > " & Slot2_dst)
+                            ZetText(LabelLast2, Slot2_src & lastTA2 & " > " & Slot2_dst)
                             ZetText(GroupBoxSlot2Last, "Last " & Format(Now, " (HH:mm:ss)"))
                         End If
                     End If
@@ -310,12 +318,12 @@ Public Class MainForm
                     tekst = tekst & "Clear DMR slot " & bteReceiveData(1)
                     If bteReceiveData(1) = 1 Then
                         Slot1_TA = ""
-                        ZetText(LabelLast1, Slot1_src & TA1 & " > " & Slot1_dst)
+                        ZetText(LabelLast1, Slot1_src & lastTA1 & " > " & Slot1_dst)
                         ZetText(GroupBoxSlot1Last, "Last " & Format(Now, " (HH:mm:ss)"))
                         GroupBoxSlot1Current.BackColor = SystemColors.Control
                     Else
                         Slot2_TA = ""
-                        ZetText(LabelLast2, Slot2_src & TA2 & " > " & Slot2_dst)
+                        ZetText(LabelLast2, Slot2_src & lastTA2 & " > " & Slot2_dst)
                         ZetText(GroupBoxSlot2Last, "Last " & Format(Now, " (HH:mm:ss)"))
                         GroupBoxSlot2Current.BackColor = SystemColors.Control
                     End If
@@ -338,6 +346,9 @@ Public Class MainForm
                     tekst = tekst & "Close Display"
                     Slot2_src = "Display closed"
                     Slot1_src = "Display closed"
+                    TA1 = peer
+                    TA2 = peer
+                    tekstPeer = peer & " closes display"
                     GroupBoxSlot2Current.BackColor = KleurStop
                 Case Else
                     tekst = tekst & "Unknow type " & type
@@ -398,6 +409,10 @@ Public Class MainForm
         If wisVelden Then
             WisAlleVelden()
             wisVelden = False
+        End If
+        If tekstPeer.Length > 0 Then
+            Log.AppendTextBox(Log.TextBox1, tekstPeer)
+            tekstPeer = ""
         End If
         If tekst.Length > 0 Then
             Log.AppendTextBox(Log.TextBox1, tekst)

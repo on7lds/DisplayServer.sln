@@ -40,4 +40,10 @@
 
         End If
     End Sub
+
+    Private Sub Log_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
+        '!!! The keypreview property of the form needs to be true for this to work
+        '     This way the form captures keyboard events before any other element in the form.
+        If e.KeyCode = Keys.F2 Then MainForm.VerbergLog()
+    End Sub
 End Class
